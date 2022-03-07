@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "4sSF217e/fOdCFlIkPA3QHZ5XyjYXwRArjhYRsNal2526l+I+Qy7RRPHVSKIeHAuowaBuQGjgz1MTL8qD8RRlQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Mitch\\source\\repos\\KTC Scraper\\KTC Scraper.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Mitch\\.nuget\\packages\\htmlagilitypack\\1.11.42\\htmlagilitypack.1.11.42.nupkg.sha512",
+    "C:\\Users\\Mitch\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}
