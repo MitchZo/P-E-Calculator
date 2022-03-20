@@ -10,6 +10,8 @@ using KTC_Scraper.Models;
 using System.Collections.Generic;
 using System;
 using Newtonsoft.Json;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace KTC_Scraper.Controllers
 {
@@ -24,18 +26,10 @@ namespace KTC_Scraper.Controllers
             return View(playerList);
         }
 
+        [HttpPut]
         private void saveToDatabase(List<Player> playerList)
         {
-            using (KtcContext context = new())
-            {
-                foreach(Player player in playerList)
-                {
-                    context.Players.Add(player);
-                    context.PlayerValues.Add(player.OneQbValues);
-                    context.PlayerValues.Add(player.SuperFlexValues);
-                }
-                    context.SaveChanges();
-            }
+            
         }
 
         private static List<Player> ParseHTMLIntoPlayers(string html)

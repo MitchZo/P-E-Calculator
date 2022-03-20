@@ -2,7 +2,7 @@
 
 namespace KTC_Scraper
 {
-    public static class ConnectionString
+    public class ConnectionString : IConnectionString
     {
         public static string ConnectionStringVal(string connectionName)
         {
