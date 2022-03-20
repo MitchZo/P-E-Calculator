@@ -1,8 +1,15 @@
-﻿namespace KTC_Scraper.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace KTC_Scraper.Models
 {
+    [Table("PlayerValues")]
     public class PlayerValues
     {
+        [Key]
+        public int PlayerValueId { get; set; }
         public int ? Value { get; set; }
+        public string  ScoringTypeDescription { get; set; }
         public int ? StartSitValue { get; set; }
         public int ? Rank { get; set; }
         public int ? OverallTrend { get; set; }

@@ -1,9 +1,14 @@
-﻿namespace KTC_Scraper.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace KTC_Scraper.Models
 {
+    [Table("Player")]
     public class Player
     {
+        [Key]
+        public int PlayerID { get; set; }
         public string PlayerName { get; set; }
-        public int ? PlayerID { get; set; }
         public string  Slug { get; set; }
         public string Position { get; set; }
         public int ? PositionID { get; set; }
@@ -25,6 +30,5 @@
         public int ? DraftYear { get; set; }
         public string College { get; set; }
         public int ? ByeWeek { get; set; }
-        public NflSchedule NflSchedule { get; set; }
     }
 }
