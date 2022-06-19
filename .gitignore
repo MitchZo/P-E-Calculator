@@ -1,5 +1,9 @@
-/nbproject/private/config.properties
-/nbproject/private/private.properties
-/nbproject/private/private.xml
-/nbproject/project.properties
-/nbproject/project.xml
+private/config.properties
+private/private.properties
+private/private.xml
+project.properties
+project.xml
+
+/bin
+/obj
+.vs

@@ -1,3 +1,4 @@
+using KTC_Scraper.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -19,6 +20,8 @@ namespace KTC_Scraper
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddSingleton<IConnectionString, ConnectionString>();
+            services.AddSingleton<IScraperService, ScraperService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
