@@ -4,6 +4,6 @@ private/private.xml
 project.properties
 project.xml
 
-/bin
-/obj
-.vs
+/bi/
+/obj/
+.vs/
