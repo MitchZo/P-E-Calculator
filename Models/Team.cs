@@ -1,15 +1,22 @@
-﻿namespace KTC_Scraper.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace KTC_Scraper.Models
 {
+    [Table("Team")]
     public class Team
     {
-        public string InRedZone { get; set; }
-        public string Score { get; set; }
-        public string HasPossession { get; set; }
-        public string PassOffensiveRank { get; set; }
-        public string RushOffensiveRank { get; set; }
-        public string Spread { get; set; }
-        public string IsHome { get; set; }
-        public string Id { get; set; }
-        public string RushDefenseRank { get; set; }
+        [Key]
+        public int TeamId { get; set; }
+        public string inRedZone { get; set; }
+        public string score { get; set; }
+        public string hasPossession { get; set; }
+        public string passOffenseRank { get; set; }
+        public string rushOffenseRank { get; set; }
+        public string passDefenseRank { get; set; }
+        public string spread { get; set; }
+        public string isHome { get; set; }
+        public string id { get; set; }
+        public string rushDefenseRank { get; set; }
     }
 }

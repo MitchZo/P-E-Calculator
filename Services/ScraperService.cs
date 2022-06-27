@@ -9,23 +9,14 @@ namespace KTC_Scraper
     {
         IConnectionString _context;
         
-        public ScraperService(ConnectionString context)
+        public ScraperService(IConnectionString context)
         {
             _context = context;
         }
 
         public void UpsertPlayer(Player player)
         {
-            using (var conn = new SqlConnection(_context.ConnectionStringVal("ktcContext")))
-            using (var command = new SqlCommand("UpsertPlayer", conn)
-            {
-                CommandType = CommandType.StoredProcedure
-            })
-            {
-                conn.Open();
-                command.Parameters.Add(new SqlParameter("@PlayerID",player.PlayerID));
-                command.ExecuteNonQuery();
-            }
+
         }
         public void AddPlayer(Player player)
         {

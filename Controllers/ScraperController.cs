@@ -1,17 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AngleSharp;
+using AngleSharp.Html.Parser;
 using HtmlAgilityPack;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using System.Net;
-using System.Text;
-using System.IO;
 using KTC_Scraper.Models;
-using System.Collections.Generic;
-using System;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Data;
-using System.Data.SqlClient;
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace KTC_Scraper.Controllers
 {
@@ -34,9 +31,23 @@ namespace KTC_Scraper.Controllers
 
         private static List<Player> ParseHTMLIntoPlayers(string html)
         {
-            HtmlDocument playersAsHTML = ParseHTML(html);
+            string playersAsHTML = GetPlayersAsHTML(html);
+            //string playersAsHTML = ParseHTML(html);
             List<Player> playerList = RetrievePlayers(playersAsHTML);
-            return playerList;
+            //return playerList;
+            return new List<Player>();
+        }
+
+        public static string GetPlayersAsHTML(string html)
+        {
+            HtmlParser parser = new HtmlParser();
+            var doc = parser.ParseDocument(html);
+            foreach(var child in doc.Body.Children)
+            {
+                if(child.InnerHtml.Contains("playersArray"))
+                    return child.InnerHtml;
+            }
+            return "error parsing HTML";
         }
 
         private static List<Player> AddPlayersToList(string playersAsJSON)
@@ -45,27 +56,43 @@ namespace KTC_Scraper.Controllers
             return playerlist;
         }
 
-        private static List<Player> RetrievePlayers(HtmlDocument playersAsHTML)
+        public static List<Player> RetrievePlayers(string playersAsHTML)
         {
-            var htmlBody = playersAsHTML.DocumentNode.SelectSingleNode("//body");
-            HtmlNodeCollection childNodes = htmlBody.ChildNodes;
-            int nodeLength;
-            int trailingExtraCharacters;
-            int startOfPlayerArray;
 
-            foreach (var node in childNodes)
+            //evaluate character by character
+            //start with bracket count at 0 and playercount at 0
+            //each character increases the playerObjectEndIndex by 1
+            //when you hit a {, bracket count increases
+            //if playercount is 0 and bracket count would increase to 1, save playerObjectEndIndex
+            //when you hit a }, bracket count decreases
+            //if player count is > 0, and bracket count is 0, save character position
+            //remove player from playersAsHtml and set playercount back to 0
+
+            List<Player> playerList = new List<Player>();
+            bool arrayOpen = true;
+            int playerObjectStartIndex = 0;
+            int playerObjectEndIndex = 0;
+
+            foreach (char character in playersAsHTML)
             {
-                if (node.InnerHtml.StartsWith("\n        var leagueType = "))
+                if (character == ']')
                 {
-                    nodeLength = node.InnerHtml.IndexOf("}]}}]");
-                    trailingExtraCharacters = (nodeLength - 45);
-                    startOfPlayerArray = node.InnerHtml.IndexOf('[');
-                    string playersAsString = node.InnerHtml.Substring(startOfPlayerArray,trailingExtraCharacters);
-
-                    return JsonConvert.DeserializeObject<List<Player>>(playersAsString);
+                    arrayOpen = false;
                 }
+                while (arrayOpen)
+                    {
+                        //if (character == '{')
+
+                    }
+
             }
-            return null;
+
+            int arrayLength = playersAsHTML.IndexOf("}]}}]");
+            int trailingExtraCharacters = (arrayLength - 45);
+            int startOfPlayerArray = playersAsHTML.IndexOf('[');
+            string playersAsString = playersAsHTML.Substring(startOfPlayerArray, trailingExtraCharacters);
+
+            return JsonConvert.DeserializeObject<List<Player>>(playersAsString);
         }
 
         private static HtmlDocument ParseHTML(string input)

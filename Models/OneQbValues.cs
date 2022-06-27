@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KTC_Scraper.Models
 {
-    [Table("SuperflexValues")]
-    public class Superflexvalues
+    [Table("OneQbValues")]
+    public class Oneqbvalues
     {
         [Key]
-        public int SuperflexValuesId { get; set; }
+        public int OneQbValuesId { get; set; }
         public int value { get; set; }
         public int startSitValue { get; set; }
         public int rank { get; set; }

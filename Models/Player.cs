@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KTC_Scraper.Models
@@ -7,28 +8,30 @@ namespace KTC_Scraper.Models
     public class Player
     {
         [Key]
-        public int PlayerID { get; set; }
-        public string PlayerName { get; set; }
-        public string  Slug { get; set; }
-        public string Position { get; set; }
-        public int ? PositionID { get; set; }
-        public string Team { get; set; }
-        public bool Rookie { get; set; }
-        public int ? Age { get; set; }
-        public int ? HeightFeet { get; set; }
-        public int ? HeightInches { get; set; }
-        public int ? Weight { get; set; }
-        public int ? SeasonsExperience { get; set; }
-        public int ? PickRound { get; set; }
-        public int ? PickNum { get; set; }
-        public bool IsFeatured { get; set; }
-        public OneQbValues OneQbValues { get; set; }
-        public SuperflexValues SuperFlexValues { get; set; }
-        public int ? Number { get; set; }
-        public string TeamLongName { get; set; }
-        public int ? Birthday { get; set; }
-        public int ? DraftYear { get; set; }
-        public string College { get; set; }
-        public int ? ByeWeek { get; set; }
+        public int playerID { get; set; }
+        public string playerName { get; set; }
+        public string slug { get; set; }
+        public string position { get; set; }
+        public int positionID { get; set; }
+        public string team { get; set; }
+        public bool rookie { get; set; }
+        public int age { get; set; }
+        public int heightFeet { get; set; }
+        public int heightInches { get; set; }
+        public int weight { get; set; }
+        public int seasonsExperience { get; set; }
+        public int pickRound { get; set; }
+        public int pickNum { get; set; }
+        public bool isFeatured { get; set; }
+        public bool isTrending { get; set; }
+        public Oneqbvalues oneQBValues { get; set; }
+        public Superflexvalues superflexValues { get; set; }
+        public int number { get; set; }
+        public string teamLongName { get; set; }
+        public string birthday { get; set; }
+        public int draftYear { get; set; }
+        public string college { get; set; }
+        public int byeWeek { get; set; }
+        public Nflschedule nflSchedule { get; set; }
     }
 }
