@@ -32,7 +32,6 @@ namespace KTC_Scraper.Controllers
         private static List<Player> ParseHTMLIntoPlayers(string html)
         {
             string playersAsHTML = GetPlayersAsHTML(html);
-            //string playersAsHTML = ParseHTML(html);
             List<Player> playerList = RetrievePlayers(playersAsHTML);
             //return playerList;
             return new List<Player>();
@@ -70,37 +69,49 @@ namespace KTC_Scraper.Controllers
 
             List<Player> playerList = new List<Player>();
             bool arrayOpen = true;
+            int stringLocation = 0;
             int playerObjectStartIndex = 0;
             int playerObjectEndIndex = 0;
+            Stack<char> parsingStack = new Stack<char>();
 
             foreach (char character in playersAsHTML)
             {
-                if (character == ']')
-                {
-                    arrayOpen = false;
-                }
                 while (arrayOpen)
+                {
+                    stringLocation++;
+                    if (character == '[' || character == '{')
                     {
-                        //if (character == '{')
-
+                        if(!parsingStack.Contains('{'))
+                        {
+                            playerObjectStartIndex = stringLocation;
+                        }
+                        parsingStack.Push(character);
                     }
-
+                    if (character == ']' || character == '}')
+                    {
+                        parsingStack.Pop();
+                        if(parsingStack.Count == 1)
+                        {
+                            playerObjectEndIndex = stringLocation;
+                        }
+                        if (parsingStack.Count == 0)
+                        {
+                            arrayOpen = false;
+                        }
+                    }
+                    break;
+                }
+                if (playerObjectEndIndex != 0)
+                {
+                    Player player = new Player();
+                    string playerAsHTML = playersAsHTML.Substring(playerObjectStartIndex - 1, (playerObjectEndIndex - playerObjectStartIndex)+1);
+                    player = JsonConvert.DeserializeObject<Player>(playerAsHTML);
+                    playerList.Add(player);
+                    playerObjectEndIndex = 0;
+                    playerObjectStartIndex = 0;
+                }
             }
-
-            int arrayLength = playersAsHTML.IndexOf("}]}}]");
-            int trailingExtraCharacters = (arrayLength - 45);
-            int startOfPlayerArray = playersAsHTML.IndexOf('[');
-            string playersAsString = playersAsHTML.Substring(startOfPlayerArray, trailingExtraCharacters);
-
-            return JsonConvert.DeserializeObject<List<Player>>(playersAsString);
-        }
-
-        private static HtmlDocument ParseHTML(string input)
-        {
-            HtmlDocument html = new();
-            html.LoadHtml(input);
-
-            return html;
+                return playerList;
         }
 
         private static async Task<string> CallUrl(string fullUrl)
