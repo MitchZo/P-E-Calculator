@@ -1,26 +1,117 @@
-﻿using KTC_Scraper.Interfaces;
+﻿using AngleSharp.Html.Parser;
+using KTC_Scraper.Contexts;
+using KTC_Scraper.Interfaces;
 using KTC_Scraper.Models;
-using System.Data;
-using System.Data.SqlClient;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace KTC_Scraper
 {
     public class ScraperService : IScraperService
     {
-        IConnectionString _context;
-        
-        public ScraperService(IConnectionString context)
+        private readonly IKtcContextContext _context;
+        private readonly IConnectionString _connection;
+
+        public ScraperService(KtcContextContext context)
         {
             _context = context;
         }
 
-        public void UpsertPlayer(Player player)
+        public List<Player> GetCurrentPlayers()
         {
-
+            string url = "https://keeptradecut.com/dynasty-rankings#";
+            string response = CallUrl(url).Result;
+            List<Player> playerList = ParseHTMLIntoPlayers(response);
+            SavePlayers(playerList);
+            return playerList;
         }
-        public void AddPlayer(Player player)
+        private static List<Player> ParseHTMLIntoPlayers(string html)
         {
+            string playersAsHTML = GetPlayersAsHTML(html);
+            List<Player> playerList = RetrievePlayers(playersAsHTML);
+            return playerList;
+        }
 
+        private static string GetPlayersAsHTML(string html)
+        {
+            HtmlParser parser = new HtmlParser();
+            var doc = parser.ParseDocument(html);
+            foreach (var child in doc.Body.Children)
+            {
+                if (child.InnerHtml.Contains("playersArray"))
+                    return child.InnerHtml;
+            }
+            return "error parsing HTML";
+        }
+
+        public static List<Player> RetrievePlayers(string playersAsHTML)
+        {
+            List<Player> playerList = new List<Player>();
+            bool arrayOpen = true;
+            int stringLocation = 0;
+            int playerObjectStartIndex = 0;
+            int playerObjectEndIndex = 0;
+            Stack<char> parsingStack = new Stack<char>();
+
+            foreach (char character in playersAsHTML)
+            {
+                while (arrayOpen)
+                {
+                    stringLocation++;
+                    if (character == '[' || character == '{')
+                    {
+                        if (!parsingStack.Contains('{'))
+                        {
+                            playerObjectStartIndex = stringLocation;
+                        }
+                        parsingStack.Push(character);
+                    }
+                    if (character == ']' || character == '}')
+                    {
+                        parsingStack.Pop();
+                        if (parsingStack.Count == 1)
+                        {
+                            playerObjectEndIndex = stringLocation;
+                        }
+                        if (parsingStack.Count == 0)
+                        {
+                            arrayOpen = false;
+                        }
+                    }
+                    break;
+                }
+                if (playerObjectEndIndex != 0)
+                {
+                    Player player = new Player();
+                    string playerAsHTML = playersAsHTML.Substring(playerObjectStartIndex - 1, (playerObjectEndIndex - playerObjectStartIndex) + 1);
+                    player = JsonConvert.DeserializeObject<Player>(playerAsHTML);
+                    playerList.Add(player);
+                    playerObjectEndIndex = 0;
+                    playerObjectStartIndex = 0;
+                }
+            }
+            return playerList;
+        }
+
+        private static async Task<string> CallUrl(string fullUrl)
+        {
+            HttpClient client = new();
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls13;
+            client.DefaultRequestHeaders.Accept.Clear();
+            var response = client.GetStringAsync(fullUrl);
+            return await response;
+        }
+
+        private void SavePlayers(List<Player> players)
+        {
+            using (_context)
+            {
+                _context.Players.AddRange(players);
+                _context.SaveChanges();
+            }
         }
     }
 }

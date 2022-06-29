@@ -1,3 +1,4 @@
+using KTC_Scraper.Contexts;
 using KTC_Scraper.Interfaces;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,7 +19,8 @@ namespace KTC_Scraper
                 {
                     webBuilder.UseStartup<Startup>();
                 }).ConfigureServices((_, services) =>
-                    services.AddSingleton<IConnectionString,ConnectionString>()
-                            .AddSingleton<IScraperService,ScraperService>());
+                    services.AddTransient<IConnectionString,ConnectionString>()
+                            .AddTransient<IScraperService,ScraperService>()
+                            .AddTransient<IKtcContextContext,KtcContextContext>());
         }
     }

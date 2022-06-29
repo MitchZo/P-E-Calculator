@@ -1,9 +1,11 @@
 using KTC_Scraper.Interfaces;
+using KTC_Scraper.Contexts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
 
 namespace KTC_Scraper
 {
@@ -20,8 +22,10 @@ namespace KTC_Scraper
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddSingleton<IConnectionString, ConnectionString>();
-            services.AddSingleton<IScraperService, ScraperService>();
+            services.AddTransient<IConnectionString, ConnectionString>();
+            services.AddTransient<IScraperService, ScraperService>();
+            services.AddTransient<IKtcContextContext, KtcContextContext>();
+            services.AddDbContext<KtcContextContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ktcContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -8,7 +8,7 @@ namespace KTC_Scraper.Models
     {
         [Key]
         public string PlayerValuesId { get; set; }
-        Superflexvalues Superflexvalues { get; set; }
-        Oneqbvalues Oneqbvalues { get; set; }
+        SuperflexValue Superflexvalues { get; set; }
+        OneQbValue Oneqbvalues { get; set; }
     }
 }

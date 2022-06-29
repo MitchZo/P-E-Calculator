@@ -1,10 +1,10 @@
 ﻿using KTC_Scraper.Models;
+using System.Collections.Generic;
 
 namespace KTC_Scraper.Interfaces
 {
     public interface IScraperService
     {
-        public void UpsertPlayer(Player player);
-        public void AddPlayer( Player player);
+        public List<Player> GetCurrentPlayers();
     }
 }
