@@ -4,6 +4,7 @@ private/private.xml
 project.properties
 project.xml
 
-/bi/
+/bin/
 /obj/
+/Migrations/
 .vs/
