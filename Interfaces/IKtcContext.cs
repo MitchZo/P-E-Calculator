@@ -5,7 +5,7 @@ using System;
 
 namespace KTC_Scraper.Interfaces
 {
-    public interface IKtcContextContext : IDisposable 
+    public interface IKtcContext : IDisposable 
     {
         DbSet<NflSchedule> NflSchedules { get; set; }
         DbSet<OneQbValue> OneQbValues { get; set; }

@@ -6,15 +6,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KTC_Scraper.Contexts
 {
-    public partial class KtcContextContext : DbContext, IKtcContextContext
+    public partial class KtcContext : DbContext, IKtcContext
     {
         private readonly IConnectionString _connection;
-        public KtcContextContext(ConnectionString connection)
+        public KtcContext(ConnectionString connection)
         {
             _connection = connection;
         }
 
-        public KtcContextContext(DbContextOptions<KtcContextContext> options)
+        public KtcContext(DbContextOptions<KtcContext> options)
             : base(options)
         {
         }

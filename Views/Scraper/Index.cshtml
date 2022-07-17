@@ -1,17 +1,29 @@
 ﻿@model List<Player>
 
+<form action="/action_page.php">
+  <input type="file" id="ProRanksCsv" name="ProRanksCsv">
+  <input type="submit">
+</form>
+<p>
     <table>
         <tr>
-               <td>Name</td>
-               <td>Position</td>
-               <td>Super Flex Rank</td>
+                <td>Number</td>
+                <td>Name</td>
+                <td>Position</td>
+                <td>Super Flex Rank</td>
         </tr>
-            @foreach (Player player in Model)
+        @{
+        var i = 1;
+        @foreach (Player player in Model)
            {
             <tr>
-               <td>@player.playerName</td>
-               <td>@player.position</td>
-               <td>@player.SuperflexValues.positionalRank</td>
+                <td>@i</td>
+                <td>@player.playerName</td>
+                <td>@player.position</td>
+                <td>@player.SuperflexValues.positionalRank</td>
             </tr>
+            i++;
            }
+        }
     </table>
+</p>

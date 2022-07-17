@@ -24,8 +24,8 @@ namespace KTC_Scraper
             services.AddControllersWithViews();
             services.AddTransient<IConnectionString, ConnectionString>();
             services.AddTransient<IScraperService, ScraperService>();
-            services.AddTransient<IKtcContextContext, KtcContextContext>();
-            services.AddDbContext<KtcContextContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ktcContext")));
+            services.AddTransient<IKtcContext, KtcContext>();
+            services.AddDbContext<KtcContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ktcContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

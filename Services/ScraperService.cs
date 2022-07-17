@@ -4,6 +4,7 @@ using KTC_Scraper.Interfaces;
 using KTC_Scraper.Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -12,20 +13,20 @@ namespace KTC_Scraper
 {
     public class ScraperService : IScraperService
     {
-        private readonly IKtcContextContext _context;
+        private readonly IKtcContext _context;
         private readonly IConnectionString _connection;
 
-        public ScraperService(KtcContextContext context)
+        public ScraperService(KtcContext context)
         {
             _context = context;
         }
 
-        public List<Player> GetCurrentPlayers()
+        public  List<Player> GetCurrentPlayers()
         {
             string url = "https://keeptradecut.com/dynasty-rankings#";
             string response = CallUrl(url).Result;
             List<Player> playerList = ParseHTMLIntoPlayers(response);
-            SavePlayers(playerList);
+             RefreshPlayers(playerList);
             return playerList;
         }
         private static List<Player> ParseHTMLIntoPlayers(string html)
@@ -105,11 +106,23 @@ namespace KTC_Scraper
             return await response;
         }
 
-        private void SavePlayers(List<Player> players)
+        private void RefreshPlayers(List<Player> players)
         {
             using (_context)
             {
-                _context.Players.AddRange(players);
+                Player foundPlayer;
+                foreach(Player player in players)
+                {
+                    foundPlayer = _context.Players.SingleOrDefault(x => x.slug == player.slug);
+                    if (foundPlayer == null)
+                    {
+                        _context.Players.Add(player);
+                    }
+                    else
+                    {
+                        foundPlayer = player;
+                    }
+                }
                 _context.SaveChanges();
             }
         }

@@ -13,11 +13,10 @@ namespace KTC_Scraper.Models
     [Index("SuperflexValuesId", Name = "IX_Player_SuperflexValuesId")]
     public partial class Player
     {
-        [Key]
-        public int Id { get; set; }
         [Required]
         public int playerID { get; set; }
         public string playerName { get; set; }
+        [Key]
         public string slug { get; set; }
         public string position { get; set; }
         public int? positionID { get; set; }

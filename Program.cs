@@ -21,6 +21,6 @@ namespace KTC_Scraper
                 }).ConfigureServices((_, services) =>
                     services.AddTransient<IConnectionString,ConnectionString>()
                             .AddTransient<IScraperService,ScraperService>()
-                            .AddTransient<IKtcContextContext,KtcContextContext>());
+                            .AddTransient<IKtcContext,KtcContext>());
         }
     }
