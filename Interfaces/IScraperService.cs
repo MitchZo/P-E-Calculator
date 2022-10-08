@@ -6,6 +6,6 @@ namespace KTC_Scraper.Interfaces
 {
     public interface IScraperService
     {
-        public List<Player> GetCurrentPlayers();
+        public Task<List<Player>> GetCurrentPlayers();
     }
 }

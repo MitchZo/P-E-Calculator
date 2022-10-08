@@ -14,17 +14,16 @@ namespace KTC_Scraper
     public class ScraperService : IScraperService
     {
         private readonly IKtcContext _context;
-        private readonly IConnectionString _connection;
 
         public ScraperService(KtcContext context)
         {
             _context = context;
         }
 
-        public  List<Player> GetCurrentPlayers()
+        public async Task<List<Player>> GetCurrentPlayers()
         {
             string url = "https://keeptradecut.com/dynasty-rankings#";
-            string response = CallUrl(url).Result;
+            string response = await CallUrl(url);
             List<Player> playerList = ParseHTMLIntoPlayers(response);
              RefreshPlayers(playerList);
             return playerList;

@@ -3,6 +3,8 @@ using KTC_Scraper.Interfaces;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TFFBImport;
+using TFFBImport.Controllers;
 
 namespace KTC_Scraper
 {
@@ -19,8 +21,9 @@ namespace KTC_Scraper
                 {
                     webBuilder.UseStartup<Startup>();
                 }).ConfigureServices((_, services) =>
-                    services.AddTransient<IConnectionString,ConnectionString>()
-                            .AddTransient<IScraperService,ScraperService>()
-                            .AddTransient<IKtcContext,KtcContext>());
+                    services.AddSingleton<IConnectionString,ConnectionString>()
+                            .AddSingleton<IScraperService,ScraperService>()
+                            .AddSingleton<IKtcContext,KtcContext>()
+                            .AddSingleton<IImportController,ImportController>());
         }
     }
